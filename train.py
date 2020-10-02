@@ -5,6 +5,7 @@ from .models import (
 	BCE_KLD_loss, MSE_KLD_loss
 	)
 from .utils import create_folders, get_dataloader, train, test
+from timeit import default_timer as timer
 
 
 BATCH_SIZE = 10000
