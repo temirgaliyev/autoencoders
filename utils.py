@@ -4,7 +4,7 @@ from torchvision.utils import save_image
 import pathlib
 
 
-def create_folders(folders..., parents=True, exist_ok=True):
+def create_folders(*folders, parents=True, exist_ok=True):
 	for folder in folders:
 		pathlib.Path(folder).mkdir(parents=parents, exist_ok=exist_ok)
 
