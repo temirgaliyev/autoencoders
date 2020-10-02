@@ -4,10 +4,7 @@ from .models import (
 	MaxPoolEncoder, ConvPoolEncoder, Decoder, VAE,
 	BCE_KLD_loss, MSE_KLD_loss
 	)
-from .utils import (
-	train_loader, test_loader,
-	train, test
-	)
+from .utils import create_folders, get_dataloader, train, test
 
 
 BATCH_SIZE = 10000
@@ -20,6 +17,8 @@ device = torch.device("cuda" if CUDA else "cpu")
 loss_function = BCE_KLD_loss if IS_LOSS_BCE else MSE_KLD_loss
 encoder_class = ConvPoolEncoder if IS_POOL_CONV else MaxPoolEncoder
 
+train_loader = get_dataloader("data", True, BATCH_SIZE)
+test_loader = get_dataloader("data", False, BATCH_SIZE)
 
 def main():
 	random_test = torch.randn(64, 16).to(device)
