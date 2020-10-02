@@ -66,6 +66,8 @@ def main():
 
 		if epoch%100 == 0 or epoch == NUM_EPOCHS:
 			filename = f"{epoch}_{test_loss:02.7f}.torch"
-			torch.save(model, path.join("results", "weights", WEIGHT_FILENAME_PREFIX+filename))
+			weight_path = path.join("results", "weights", WEIGHT_FILENAME_PREFIX+filename)
+			torch.save(model, weight_path)
+			print(f"SAVING weights at {weight_path}")
 
 	print("Completed!")
