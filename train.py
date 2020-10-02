@@ -17,6 +17,8 @@ device = torch.device("cuda" if CUDA else "cpu")
 loss_function = BCE_KLD_loss if IS_LOSS_BCE else MSE_KLD_loss
 encoder_class = ConvPoolEncoder if IS_POOL_CONV else MaxPoolEncoder
 
+create_folders("data", "results/rand", "results/test")
+
 train_loader = get_dataloader("data", True, BATCH_SIZE)
 test_loader = get_dataloader("data", False, BATCH_SIZE)
 
