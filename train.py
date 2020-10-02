@@ -18,12 +18,15 @@ IS_POOL_CONV = False
 
 
 def main():
+	print("Initialization...")
 	device = torch.device("cuda" if CUDA else "cpu")
 	loss_function = BCE_KLD_loss if IS_LOSS_BCE else MSE_KLD_loss
 	encoder_class = ConvPoolEncoder if IS_POOL_CONV else MaxPoolEncoder
 
+	print("Creating folders...")
 	create_folders("data", "results/rand", "results/test")
 
+	print("Loading MNIST...")
 	train_loader = get_dataloader("data", True, BATCH_SIZE)
 	test_loader = get_dataloader("data", False, BATCH_SIZE)
 
@@ -34,8 +37,8 @@ def main():
 	model = VAE(encoder, decoder).to(device)
 	optimizer = torch.optim.Adam(model.parameters(), lr=1e-3)
 
+	print("Training...")
 	train_losses, test_losses = [], []
-
 	for epoch in range(1, NUM_EPOCHS+1):
 
 	    time_started = timer()
@@ -54,4 +57,4 @@ def main():
 	        random_sample = model.decoder(random_test).cpu()
 	        save_image(random_sample, f"results/rand/{epoch:02d}.png")
 
-
+	print("Completed!")
