@@ -2,6 +2,7 @@ import torch
 from torchvision.utils import save_image
 
 from timeit import default_timer as timer
+from os import path
 
 from .models import (
 	MaxPoolEncoder, ConvPoolEncoder, Decoder, VAE,
@@ -15,6 +16,9 @@ CUDA = torch.cuda.is_available()
 NUM_EPOCHS = 1000
 IS_LOSS_BCE = True
 IS_POOL_CONV = False
+WEIGHT_FILENAME_PREFIX = "WEIGHT_{}_{}_".format(
+						'BCE' if IS_LOSS_BCE else 'MSE',
+						'CONV' if IS_POOL_CONV else 'MAXP')
 
 
 def main():
@@ -24,7 +28,10 @@ def main():
 	encoder_class = ConvPoolEncoder if IS_POOL_CONV else MaxPoolEncoder
 
 	print("Creating folders...")
-	create_folders("data", "results/rand", "results/test")
+	create_folders("data", 
+		path.join("results", "rand"), 
+		path.join("results", "test"), 
+		path.join("results", "weights"))
 
 	print("Loading MNIST...")
 	train_loader = get_dataloader("data", True, BATCH_SIZE)
@@ -41,20 +48,24 @@ def main():
 	train_losses, test_losses = [], []
 	for epoch in range(1, NUM_EPOCHS+1):
 
-	    time_started = timer()
-	    
-	    train_loss = train(epoch, train_loader, model, loss_function, device, optimizer)
-	    test_loss = test(epoch, test_loader, model, loss_function, device, True)
+		time_started = timer()
 
-	    time_elapsed = timer() - time_started
+		train_loss = train(epoch, train_loader, model, loss_function, device, optimizer)
+		test_loss = test(epoch, test_loader, model, loss_function, device, True)
 
-	    print(f"Epoch: {epoch}/{NUM_EPOCHS:02d} | Train loss: {train_loss:02.7f} | Test loss: {test_loss:02.7f} | Time: {time_elapsed}")
+		time_elapsed = timer() - time_started
 
-	    train_losses.append(train_loss)
-	    test_losses.append(test_loss)
+		print(f"Epoch: {epoch}/{NUM_EPOCHS:02d} | Train loss: {train_loss:02.7f} | Test loss: {test_loss:02.7f} | Time: {time_elapsed}")
 
-	    with torch.no_grad():
-	        random_sample = model.decoder(random_test).cpu()
-	        save_image(random_sample, f"results/rand/{epoch:02d}.png")
+		train_losses.append(train_loss)
+		test_losses.append(test_loss)
+
+		with torch.no_grad():
+			random_sample = model.decoder(random_test).cpu()
+			save_image(random_sample, f"results/rand/{epoch:02d}.png")
+
+		if epoch%100 == 0 or epoch == NUM_EPOCHS:
+			filename = f"{epoch}_{test_loss:02.7f}.torch"
+			torch.save(model, path.join("results", "weights", WEIGHT_FILENAME_PREFIX+filename))
 
 	print("Completed!")
