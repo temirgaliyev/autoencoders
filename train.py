@@ -1,10 +1,10 @@
 import torch
 
-from models import (
+from .models import (
 	MaxPoolEncoder, ConvPoolEncoder, Decoder, VAE,
 	BCE_KLD_loss, MSE_KLD_loss
 	)
-from utils import (
+from .utils import (
 	train_loader, test_loader,
 	train, test
 	)
