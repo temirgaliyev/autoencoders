@@ -50,7 +50,6 @@ def main():
 
 	    with torch.no_grad():
 	        random_sample = model.decoder(random_test).cpu()
-	        random_sample = last_activation(random_sample)
 	        save_image(random_sample, f"results/rand/{epoch:02d}.png")
 
 
