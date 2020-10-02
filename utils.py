@@ -16,7 +16,7 @@ def get_dataloader(folder: str, is_train: bool, batch_size: int):
                             transform=transforms.ToTensor())
 
 	dataloader = torch.utils.data.DataLoader(dataset,
-	                                        batch_size=dataset, 
+	                                        batch_size=batch_size, 
 	                                        shuffle=is_train)
 	return dataloader
 
