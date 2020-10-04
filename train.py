@@ -27,7 +27,7 @@ def train(epochs=1000, batch_size=1024, cuda=True, is_loss_bce=True, is_pool_con
 
 	random_test = torch.randn(64, 16).to(device)
 
-	model = get_model(pool_conv).to(device)
+	model = get_model(is_pool_conv).to(device)
 	optimizer = torch.optim.Adam(model.parameters(), lr=1e-3)
 	loss_function = get_loss(is_loss_bce)
 
