@@ -11,7 +11,7 @@ from .models import (
 from .utils import create_folders, get_dataloader, train, test
 
 
-def main(epochs=1000, batch_size=1024, cuda=True, loss_bce=True, pool_conv=True):
+def train(epochs=1000, batch_size=1024, cuda=True, loss_bce=True, pool_conv=True):
 	print("Initialization...")
 	WEIGHT_FILENAME_PREFIX = "WEIGHT_{}_{}_".format(
 							'BCE' if loss_bce else 'MSE',
