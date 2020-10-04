@@ -19,11 +19,11 @@ def get_dataloader(folder: str, is_train: bool, batch_size: int):
 	dataset = datasets.MNIST(folder, 
 							train=is_train, 
 							download=True,
-                            transform=transforms.ToTensor())
+							transform=transforms.ToTensor())
 
 	dataloader = torch.utils.data.DataLoader(dataset,
-	                                        batch_size=batch_size, 
-	                                        shuffle=is_train)
+											batch_size=batch_size,
+											shuffle=is_train)
 	return dataloader
 
 
@@ -78,29 +78,41 @@ def test_epoch(epoch: int, dataloader, model, loss_function, device, save: bool)
     return test_loss
 
 
-def create_gif(model, test_X: torch.Tensor, N=10):
-	model.eval()
+def create_gif(model, test_X: torch.Tensor, filename: str, size: int, N: int=10):
+    model.eval()
+    img = None
+    imgs = []
 
-	with torch.no_grad():
-	    for i in range(1, len(test_X)+1):
-	        starting = test_X[i-1]
-	        ending = test_X[i]
+    resize = transforms.Resize(size)
+    to_pil = transforms.ToPILImage()
+    apply_transforms = lambda x: (resize(to_pil(x))) 
 
-	        starting_mu, starting_logvar = model.encoder(starting.unsqueeze(0))
-	        ending_mu, ending_logvar = model.encoder(ending.unsqueeze(0))
+    with torch.no_grad():
+        for i in range(1, len(test_X)):
+            starting = test_X[i-1]
+            ending = test_X[i]
 
-	        starting_vector = starting_mu + torch.exp(0.5*starting_logvar)
-	        ending_vector = ending_mu + torch.exp(0.5*ending_logvar)
+            starting_mu, starting_logvar = model.encoder(starting.unsqueeze(0))
+            ending_mu, ending_logvar = model.encoder(ending.unsqueeze(0))
 
-	        starting_decoded = last_activation(model.decoder(starting_vector))
-	        ending_decoded = last_activation(model.decoder(ending_vector))
+            starting_vector = starting_mu + torch.exp(0.5*starting_logvar)
+            ending_vector = ending_mu + torch.exp(0.5*ending_logvar)
 
-	        part = (ending_vector-starting_vector)/N
-	        middle_vector = starting_vector
+            starting_decoded = last_activation(model.decoder(starting_vector))
+            ending_decoded = last_activation(model.decoder(ending_vector))
 
-	        for j in range(N):
-	            print(i*N+j)
-	            middle_vector += part 
-	            middle_decoded = last_activation(model.decoder(middle_vector))
-	            save_image(middle_decoded, f"results/gif/{(i-1)*N+j+1:02d}.png")
-	
+            part = (ending_vector-starting_vector)/N
+            middle_vector = starting_vector
+            
+            if img is None:
+                decoded = model.decoder(middle_vector)
+                img = apply_transforms(decoded.squeeze())
+
+            for j in range(N):
+                middle_vector += part 
+                middle_decoded = model.decoder(middle_vector)
+                imgs.append(apply_transforms(middle_decoded.squeeze()))
+
+    img.save(filename, format="GIF", append_images=imgs, save_all=True, duration=200, loop=0)
+
+    return filename
