@@ -13,7 +13,7 @@ Variational Autoencoder using MNIST dataset
 
 | ![Some examples from test set](https://github.com/temirgaliyev/mnist_vae/blob/master/static/example.png) | 
 |:--:| 
-| *Exploring Latent Space* |
+| *Some examples from test set* |
 
 ## Description
 Another one Variational Autoencoder trained on MNIST
