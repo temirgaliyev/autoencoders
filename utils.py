@@ -98,8 +98,8 @@ def create_gif(model, test_X: torch.Tensor, filename: str, size: int, N: int=10)
             starting_vector = starting_mu + torch.exp(0.5*starting_logvar)
             ending_vector = ending_mu + torch.exp(0.5*ending_logvar)
 
-            starting_decoded = last_activation(model.decoder(starting_vector))
-            ending_decoded = last_activation(model.decoder(ending_vector))
+            starting_decoded = model.decoder(starting_vector)
+            ending_decoded = model.decoder(ending_vector)
 
             part = (ending_vector-starting_vector)/N
             middle_vector = starting_vector
