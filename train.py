@@ -11,21 +11,15 @@ from .models import (
 from .utils import create_folders, get_dataloader, train, test
 
 
-BATCH_SIZE = 10000
-CUDA = torch.cuda.is_available()
-NUM_EPOCHS = 1000
-IS_LOSS_BCE = True
-IS_POOL_CONV = False
-WEIGHT_FILENAME_PREFIX = "WEIGHT_{}_{}_".format(
-						'BCE' if IS_LOSS_BCE else 'MSE',
-						'CONV' if IS_POOL_CONV else 'MAXP')
-
-
-def main():
+def main(epochs=1000, batch_size=1024, cuda=True, loss_bce=True, pool_conv=True):
 	print("Initialization...")
-	device = torch.device("cuda" if CUDA else "cpu")
-	loss_function = BCE_KLD_loss if IS_LOSS_BCE else MSE_KLD_loss
-	encoder_class = ConvPoolEncoder if IS_POOL_CONV else MaxPoolEncoder
+	WEIGHT_FILENAME_PREFIX = "WEIGHT_{}_{}_".format(
+							'BCE' if loss_bce else 'MSE',
+							'CONV' if pool_conv else 'MAXP')
+	cuda_available = torch.cuda.is_available()
+	device = torch.device("cuda" if cuda_available and cuda else "cpu")
+	loss_function = BCE_KLD_loss if loss_bce else MSE_KLD_loss
+	encoder_class = ConvPoolEncoder if pool_conv else MaxPoolEncoder
 
 	print("Creating folders...")
 	create_folders("data", 
@@ -34,8 +28,8 @@ def main():
 		path.join("results", "weights"))
 
 	print("Loading MNIST...")
-	train_loader = get_dataloader("data", True, BATCH_SIZE)
-	test_loader = get_dataloader("data", False, BATCH_SIZE)
+	train_loader = get_dataloader("data", True, batch_size)
+	test_loader = get_dataloader("data", False, batch_size)
 
 	random_test = torch.randn(64, 16).to(device)
 
@@ -46,7 +40,7 @@ def main():
 
 	print("Training...")
 	train_losses, test_losses = [], []
-	for epoch in range(1, NUM_EPOCHS+1):
+	for epoch in range(1, epochs+1):
 
 		time_started = timer()
 
@@ -55,7 +49,7 @@ def main():
 
 		time_elapsed = timer() - time_started
 
-		print(f"Epoch: {epoch}/{NUM_EPOCHS:02d} | Train loss: {train_loss:02.7f} | Test loss: {test_loss:02.7f} | Time: {time_elapsed}")
+		print(f"Epoch: {epoch}/{epochs:02d} | Train loss: {train_loss:02.7f} | Test loss: {test_loss:02.7f} | Time: {time_elapsed}")
 
 		train_losses.append(train_loss)
 		test_losses.append(test_loss)
@@ -64,7 +58,7 @@ def main():
 			random_sample = model.decoder(random_test).cpu()
 			save_image(random_sample, f"results/rand/{epoch:02d}.png")
 
-		if epoch%100 == 0 or epoch == NUM_EPOCHS:
+		if epoch%100 == 0 or epoch == epochs:
 			filename = f"{epoch}_{test_loss:02.7f}.torch"
 			weight_path = path.join("results", "weights", WEIGHT_FILENAME_PREFIX+filename)
 			torch.save(model, weight_path)
