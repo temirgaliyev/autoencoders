@@ -8,7 +8,7 @@ from .models import (
 	MaxPoolEncoder, ConvPoolEncoder, Decoder, VAE,
 	BCE_KLD_loss, MSE_KLD_loss
 	)
-from .utils import create_folders, get_dataloader, train, test
+from .utils import create_folders, get_dataloader, train_epoch, test_epoch
 
 
 def train(epochs=1000, batch_size=1024, cuda=True, loss_bce=True, pool_conv=True):
@@ -44,8 +44,8 @@ def train(epochs=1000, batch_size=1024, cuda=True, loss_bce=True, pool_conv=True
 
 		time_started = timer()
 
-		train_loss = train(epoch, train_loader, model, loss_function, device, optimizer)
-		test_loss = test(epoch, test_loader, model, loss_function, device, True)
+		train_loss = train_epoch(epoch, train_loader, model, loss_function, device, optimizer)
+		test_loss = test_epoch(epoch, test_loader, model, loss_function, device, True)
 
 		time_elapsed = timer() - time_started
 

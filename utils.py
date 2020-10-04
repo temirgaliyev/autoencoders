@@ -21,7 +21,7 @@ def get_dataloader(folder: str, is_train: bool, batch_size: int):
 	return dataloader
 
 
-def train(epoch: int, dataloader, model, loss_function, device, optimizer) -> int:
+def train_epoch(epoch: int, dataloader, model, loss_function, device, optimizer) -> int:
     model.train()
     train_loss = 0
 
@@ -39,7 +39,7 @@ def train(epoch: int, dataloader, model, loss_function, device, optimizer) -> in
     return train_loss
 
 
-def test(epoch: int, dataloader, model, loss_function, device, save: bool) -> int:
+def test_epoch(epoch: int, dataloader, model, loss_function, device, save: bool) -> int:
     model.eval()
     test_loss = 0
     
