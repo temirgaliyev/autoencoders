@@ -3,6 +3,11 @@ from torchvision import datasets, transforms
 from torchvision.utils import save_image
 import pathlib
 from typing import List
+from .models import (
+	BCE_KLD_loss, MSE_KLD_loss,
+	ConvPoolEncoder, MaxPoolEncoder, 
+	Decoder, VAE
+	)
 
 
 def create_folders(*folders: List[str], parents=True, exist_ok=True):
@@ -22,12 +27,15 @@ def get_dataloader(folder: str, is_train: bool, batch_size: int):
 	return dataloader
 
 
-def get_model(pool_conv=False):
-	encoder_class = ConvPoolEncoder if pool_conv else MaxPoolEncoder
+def get_model(is_pool_conv=False):
+	encoder_class = ConvPoolEncoder if is_pool_conv else MaxPoolEncoder
 	encoder = encoder_class()
 	decoder = Decoder()
 	model = VAE(encoder, decoder)
 	return model
+
+
+def get_loss(is_loss_bce=True)
 
 
 def train_epoch(epoch: int, dataloader, model, loss_function, device, optimizer) -> int:

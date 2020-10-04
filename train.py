@@ -4,21 +4,16 @@ from torchvision.utils import save_image
 from timeit import default_timer as timer
 from os import path
 
-from .models import (
-	MaxPoolEncoder, ConvPoolEncoder, Decoder, VAE,
-	BCE_KLD_loss, MSE_KLD_loss
-	)
-from .utils import create_folders, get_dataloader, get_model, train_epoch, test_epoch
+from .utils import create_folders, get_dataloader, get_model, get_loss, train_epoch, test_epoch
 
 
-def train(epochs=1000, batch_size=1024, cuda=True, loss_bce=True, pool_conv=False):
+def train(epochs=1000, batch_size=1024, cuda=True, is_loss_bce=True, is_pool_conv=False):
 	print("Initialization...")
 	WEIGHT_FILENAME_PREFIX = "WEIGHT_{}_{}_".format(
-							'BCE' if loss_bce else 'MSE',
-							'CONV' if pool_conv else 'MAXP')
+							'BCE' if is_loss_bce else 'MSE',
+							'CONV' if is_pool_conv else 'MAXP')
 	cuda_available = torch.cuda.is_available()
 	device = torch.device("cuda" if cuda_available and cuda else "cpu")
-	loss_function = BCE_KLD_loss if loss_bce else MSE_KLD_loss
 
 	print("Creating folders...")
 	create_folders("data", 
@@ -34,6 +29,7 @@ def train(epochs=1000, batch_size=1024, cuda=True, loss_bce=True, pool_conv=Fals
 
 	model = get_model(pool_conv).to(device)
 	optimizer = torch.optim.Adam(model.parameters(), lr=1e-3)
+	loss_function = get_loss(is_loss_bce)
 
 	print("Training...")
 	train_losses, test_losses = [], []
