@@ -35,7 +35,8 @@ def get_model(is_pool_conv=False):
 	return model
 
 
-def get_loss(is_loss_bce=True)
+def get_loss(is_loss_bce=True):
+	return BCE_KLD_loss if is_loss_bce else MSE_KLD_loss
 
 
 def train_epoch(epoch: int, dataloader, model, loss_function, device, optimizer) -> int:
