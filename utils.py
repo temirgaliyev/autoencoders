@@ -2,9 +2,10 @@ import torch
 from torchvision import datasets, transforms
 from torchvision.utils import save_image
 import pathlib
+from typing import List
 
 
-def create_folders(*folders, parents=True, exist_ok=True):
+def create_folders(*folders: List[str], parents=True, exist_ok=True):
 	for folder in folders:
 		pathlib.Path(folder).mkdir(parents=parents, exist_ok=exist_ok)
 
@@ -19,6 +20,14 @@ def get_dataloader(folder: str, is_train: bool, batch_size: int):
 	                                        batch_size=batch_size, 
 	                                        shuffle=is_train)
 	return dataloader
+
+
+def get_model(pool_conv=False):
+	encoder_class = ConvPoolEncoder if pool_conv else MaxPoolEncoder
+	encoder = encoder_class()
+	decoder = Decoder()
+	model = VAE(encoder, decoder)
+	return model
 
 
 def train_epoch(epoch: int, dataloader, model, loss_function, device, optimizer) -> int:
