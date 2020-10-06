@@ -1,4 +1,4 @@
-# mnist_vae
+# Autoencoders
 Variational Autoencoder using MNIST dataset  
 [Colab Demo](https://colab.research.google.com/drive/1WpfOQZxpkq-eL7eT5kWvJvKTzxKJAww-)  
 
@@ -8,11 +8,11 @@ Variational Autoencoder using MNIST dataset
 [Links](#links)
 
 ## Examples  
-| ![Exploring Latent Space gif](https://github.com/temirgaliyev/mnist_vae/blob/master/static/example.gif) | 
+| ![Exploring Latent Space gif](https://github.com/temirgaliyev/autoencoders/blob/master/static/example.gif) | 
 |:--:| 
 | *Exploring Latent Space* |
 
-| ![Some examples from test set](https://github.com/temirgaliyev/mnist_vae/blob/master/static/example.png) | 
+| ![Some examples from test set](https://github.com/temirgaliyev/autoencoders/blob/master/static/example.png) | 
 |:--:| 
 | *Some examples from test set* |
 
