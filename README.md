@@ -17,7 +17,10 @@ Variational Autoencoder using MNIST dataset
 | *Some examples from test set* |
 
 ## Description
-Another one Variational Autoencoder trained on MNIST
+Another one Variational Autoencoder trained on MNIST  
+
+Weights:
+  - [CNN with MaxPooling | Epoch: 1000 | BCE Loss: 0.0001059](https://s3.eu-central-1.amazonaws.com/yela.static/WEIGHT_BCE_MAXP_1000_0.0001059.torch)
 
 ## TODO
 - [x] Create VAE training pipeline and train
