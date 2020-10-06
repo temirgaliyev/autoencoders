@@ -20,9 +20,14 @@ Another one Variational Autoencoder trained on MNIST
 
 ## TODO
 - [x] Create VAE training pipeline and train
-- [x] Change Model
+- [ ] Architecture
   - [x] BCE loss instead of MSE
   - [x] Convolutional Pooling instead of MaxPool
+  - [ ] Train Autoencoder
+  - [ ] Train Fully-Coonvolutional AE
+  - [ ] Train Variational Autoencoder
+  - [x] Train Fully-Coonvolutional VAE
+- [ ] Compare different architectures (Need some metric)
 - [x] Minimum working example in Colab
 - [ ] Train VAE on different dataset (ex. [CelebA](http://mmlab.ie.cuhk.edu.hk/projects/CelebA.html ))  
   
