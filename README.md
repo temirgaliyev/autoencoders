@@ -1,5 +1,6 @@
 # mnist_vae
-Variational Autoencoder using MNIST dataset
+Variational Autoencoder using MNIST dataset  
+[Colab Demo](https://colab.research.google.com/drive/1WpfOQZxpkq-eL7eT5kWvJvKTzxKJAww-)  
 
 [Examples](#examples)  
 [Description](#description)  
